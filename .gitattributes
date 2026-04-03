@@ -1,3 +1,5 @@
-tests/** linguist-vendored
-vitest.config.js linguist-vendored
-* text=lf
+* text=auto
+*.clar text eol=lf
+*.ts text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
