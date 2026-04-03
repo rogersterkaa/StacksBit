@@ -1,5 +1,5 @@
 # StacksBit
-
+**Bitcoin payments for African merchants. Simple. Safe. Non-custodial.**
 > Non-custodial Bitcoin payment gateway for African merchants, built on Stacks blockchain.
 
 ![Tests](https://img.shields.io/badge/tests-28%2F28%20passing-brightgreen)
@@ -166,7 +166,7 @@ Test Files  1 passed (1)
 - 28 passing unit tests
 - Testnet deployment ready
 
-### Phase 2 - Naira Settlement (Q3 2026)
+### Phase 2 - Naira Settlement (Q2/Q3 2026)
 - Paystack/Flutterwave integration
 - NGN/BTC exchange rate oracle
 - Nigeria merchant pilot
@@ -178,16 +178,6 @@ Test Files  1 passed (1)
 ### Phase 4 - DAO Governance (2027)
 - Community-driven dispute resolution
 - Decentralized fee management
-
-## Grant Applications
-
-### Stacks Grants ($15K - $30K)
-- Focus: Bitcoin payment infrastructure
-- Apply: https://grants.stacks.org
-
-### Superteam Microgrant ($5K - $10K)
-- Focus: African Bitcoin adoption
-- Apply: https://superteam.fun
 
 ## FAQ
 
@@ -201,7 +191,7 @@ sBTC currently. Any SIP-010 compatible token can be added.
 2.5% on successful transactions, capped at 10%.
 
 **When is mainnet?**
-After security audit. Targeted for Q2/Q3 2026.
+After security audit. Targeted for Q3 2026.
 
 **What is Naira settlement?**
 Merchants can opt to receive NGN. The contract records the obligation on-chain and a backend triggers Paystack/Flutterwave payout.
@@ -215,6 +205,8 @@ MIT License
 - GitHub: https://github.com/rogersterkaa/StacksBit
 - Email: rogersterkaa@gmail.com
 
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first.
 ---
 
 Built for African merchants. Powered by Bitcoin.
