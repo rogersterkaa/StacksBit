@@ -1,0 +1,34 @@
+[project]
+name = 'stacksbit'
+description = 'Bitcoin payment infrastructure for Stacks merchants'
+authors = ['Terkaa Tarkighir <rogersterkaa@gmail.com>']
+telemetry = false
+
+[contracts.sip-010-trait]
+path = 'contracts/sip-010-trait.clar'
+clarity_version = 3
+epoch = 'latest'
+
+[contracts.sbtc]
+path = 'contracts/sbtc.clar'
+clarity_version = 3
+epoch = 'latest'
+depends_on = ['sip-010-trait']
+
+[contracts.stacksbit-merchants]
+path = 'contracts/stacksbit-merchants.clar'
+clarity_version = 3
+epoch = 'latest'
+depends_on = ['sip-010-trait']
+
+[contracts.stacksbit-escrow]
+path = 'contracts/stacksbit-escrow.clar'
+clarity_version = 3
+epoch = 'latest'
+depends_on = ['sip-010-trait', 'stacksbit-merchants']
+
+[contracts.stacksbit-gateway]
+path = 'contracts/stacksbit-gateway.clar'
+clarity_version = 3
+epoch = 'latest'
+depends_on = ['sip-010-trait', 'stacksbit-merchants', 'stacksbit-escrow']
