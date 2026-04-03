@@ -92,7 +92,7 @@
     (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
     (asserts! (is-eq (some caller) (get customer payment)) ERR-NOT-CUSTOMER)
     (asserts! (is-eq (get status payment) "locked") ERR-WRONG-STATUS)
-    (let ((result (try! (as-contract (contract-call? .stacksbit-escrow release-funds payment-id token)))))
+    (let ((result (try! (contract-call? .stacksbit-escrow release-funds payment-id token))))
       (try! (as-contract (contract-call? .stacksbit-merchants settle-payment payment-id)))
       (print { event: "delivery-confirmed", payment-id: payment-id, customer: caller })
       (ok result)

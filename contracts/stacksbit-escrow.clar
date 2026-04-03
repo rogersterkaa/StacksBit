@@ -197,7 +197,7 @@
   ;; and token contract might reject it.
   (begin
     (asserts! (not (var-get contract-paused)) ERR-CONTRACT-PAUSED)
-    (asserts! (is-gateway) ERR-NOT-GATEWAY)
+    (asserts! (or (is-gateway) (is-eq tx-sender customer)) ERR-NOT-GATEWAY)
     (asserts! (> amount u0) ERR-INVALID-AMOUNT)
     (asserts! (is-none (map-get? escrow-records payment-id)) ERR-WRONG-STATUS)
     
@@ -257,7 +257,7 @@
     (payout (- amount fee))
   )
     (asserts! (is-gateway) ERR-NOT-GATEWAY)
-    (asserts! (is-eq (get status escrow) "locked") ERR-WRONG-STATUS)
+    (asserts! (or (is-eq (get status escrow) "locked") (is-eq (get status escrow) "disputed")) ERR-WRONG-STATUS)
     (asserts! (is-eq (contract-of token) (get token escrow)) ERR-WRONG-TOKEN)
     
     ;; Transfer merchant's portion using as-contract

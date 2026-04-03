@@ -66,26 +66,26 @@ plan:
         - emulated-contract-publish:
             contract-name: sip-010-trait
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\sip-010-trait.clar"
+            path: contracts/sip-010-trait.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: sbtc
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\sbtc.clar"
+            path: contracts/sbtc.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: stacksbit-escrow
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\stacksbit-escrow.clar"
+            path: contracts/stacksbit-escrow.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: stacksbit-merchants
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\stacksbit-merchants.clar"
+            path: contracts/stacksbit-merchants.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: stacksbit-gateway
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\stacksbit-gateway.clar"
+            path: contracts/stacksbit-gateway.clar
             clarity-version: 3
       epoch: "3.2"
