@@ -1,255 +1,220 @@
-# StacksBit: Bitcoin Payment Infrastructure for African Merchants
+# StacksBit
 
-![Status](https://img.shields.io/badge/status-production%20ready-brightgreen)
+> Non-custodial Bitcoin payment gateway for African merchants, built on Stacks blockchain.
+
 ![Tests](https://img.shields.io/badge/tests-28%2F28%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-StacksBit is a **non-custodial Bitcoin payment gateway** built on Stacks blockchain, designed to enable African merchants to accept Bitcoin payments safely, instantly, and with dispute protection.
+## Problem
 
-## Problem Statement
+Small businesses in Nigeria and across Africa cannot easily accept Bitcoin:
 
-**The Gap in African Bitcoin Payments:**
+- Existing tools like BTCPay are too complex for non-technical merchants
+- Custodial solutions require trusting a third party with funds
+- No built-in dispute protection means fraud risk
+- Volatility discourages adoption without local currency settlement
+- No integration with local payment systems like Naira
 
-Small businesses and merchants across Africa struggle to accept Bitcoin despite living in countries with the highest crypto adoption rates globally:
+## Solution
 
-- âŒ **Existing solutions are too complex** (BTCPay requires technical expertise)
-- âŒ **Custodial platforms risk fund loss** (merchants lose trust with Bitcoin)
-- âŒ **No dispute protection** (fraud risk discourages adoption)
-- âŒ **Volatility discourages merchants** (no local currency settlement)
-- âŒ **No integration with local payments** (Naira, Cedis, etc.)
+StacksBit is a trustless Bitcoin payment gateway that makes accepting Bitcoin as simple as using Paystack:
 
-**Result:** Bitcoin remains a speculative asset, not a usable payment method for real commerce.
-
-## The Solution: StacksBit
-
-StacksBit bridges this gap with a **trustless, secure, and locally-friendly Bitcoin payment infrastructure:**
-
-\\\
-Merchant Creates Invoice
-    â†“
-Customer Pays in Bitcoin
-    â†“
-Funds Locked in Smart Contract Escrow (Non-Custodial)
-    â†“
-Merchant Delivers Goods/Services
-    â†“
-Customer Confirms â†’ Funds Released Instantly
-    â†“
-Settlement in Local Currency (Optional Naira/Cedis)
-\\\
-
-### Core Features
-
-âœ… **Non-Custodial Escrow** â€” Funds held in smart contracts, not company wallets
-âœ… **Built-In Dispute Resolution** â€” Customer or merchant can dispute; owner arbitrates
-âœ… **Multi-Token Support** â€” Works with sBTC, USDC, or any SIP-010 token
-âœ… **Naira Settlement Ready** â€” Optional local currency payout via Paystack/Flutterwave
-âœ… **Simple Merchant Onboarding** â€” Register in seconds, no technical knowledge required
-âœ… **Transparent Fees** â€” 2.5% platform fee (configurable, capped at 10%)
-âœ… **Real-Time Payments** â€” Instant confirmation, no waiting for blocks
+1. Merchant creates a payment link
+2. Customer pays in Bitcoin (sBTC)
+3. Funds locked in Clarity smart contract escrow
+4. Merchant delivers goods or service
+5. Customer confirms, funds released automatically
+6. Optional Naira settlement via Paystack/Flutterwave
 
 ## Architecture
 
-StacksBit follows a **modular 3-contract architecture:**
-
-\\\
+```
 Frontend (Web/Mobile)
-    â†“
-Gateway Contract (Orchestration)
-    â”œâ”€â†’ Merchants Contract (Storage)
-    â”œâ”€â†’ Escrow Contract (Fund Management)
-    â””â”€â†’ SIP-010 Token Trait
-\\\
+        |
+Gateway Contract (stacksbit-gateway.clar)
+        |
+   +----+----+
+   |         |
+Merchants  Escrow
+Contract   Contract
+(storage)  (funds)
+```
 
-### Contract Overview
+### Contracts
 
-| Contract | Purpose | Key Functions |
-|----------|---------|---|
-| **stacksbit-gateway** | Orchestrates payment flow, validates inputs | \egister-merchant\, \create-payment-request\, \pay-invoice\, \confirm-delivery\, \aise-dispute\, \withdraw\ |
-| **stacksbit-merchants** | Pure storage for merchant profiles & payment records | \egister-merchant\, \create-payment\, \settle-payment\, \get-merchant-balance\ |
-| **stacksbit-escrow** | Holds funds, manages token transfers, handles disputes | \lock-funds\, \elease-funds\, \efund-customer\, \lag-dispute\ |
-| **sip-010-trait** | Standard token interface | Multi-token compatibility |
+| Contract | Purpose |
+|----------|---------|
+| stacksbit-gateway.clar | Orchestrates payment flow |
+| stacksbit-merchants.clar | Stores merchant profiles and payment records |
+| stacksbit-escrow.clar | Holds funds and handles disputes |
+| sip-010-trait.clar | Standard token interface |
+
+## Features
+
+- Non-Custodial Escrow: Funds held in smart contracts, never in company wallets
+- Built-In Dispute Resolution: Customer or merchant can dispute; admin arbitrates
+- Multi-Token Support: Works with sBTC, USDC, or any SIP-010 token
+- Naira Settlement Ready: Optional NGN payout via Paystack/Flutterwave
+- Simple Onboarding: Merchants register in seconds
+- Transparent Fees: 2.5% platform fee, capped at 10%
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- Clarinet CLI v2.0+
-- Bitcoin/Stacks testnet account (for deployment)
-
-### Installation
-
-\\\ash
+```bash
 git clone https://github.com/rogersterkaa/StacksBit.git
-cd stacksbit
+cd StacksBit
 npm install
 clarinet check
 npm test
-\\\
+```
 
-### Test Results
+## Test Results
 
-All 28 unit tests passing:
+```
+Test Files  1 passed (1)
+     Tests  28 passed (28)
+```
 
-\\\ash
-npm test
-# Expected: 28 passed (28)
-\\\
+## Usage
 
-## Key Features
+### Register as a Merchant
 
-### 1. Non-Custodial Escrow
-Funds locked in smart contracts until customer confirms delivery. Never touches merchant wallets until confirmed.
-
-### 2. Dispute Resolution
-Built-in conflict resolution system. Owner arbitrates disputes after reviewing evidence.
-
-### 3. Multi-Token Support
-Works with sBTC, USDC, or any SIP-010 token. Extensible for future cryptocurrencies.
-
-### 4. Naira Settlement
-Optional local currency settlement for Nigerian merchants via Paystack/Flutterwave integration.
-
-### 5. Transparent Fees
-Clear 2.5% platform fee on successful transactions. No hidden charges.
-
-## Usage Examples
-
-### Register Merchant
-\\\clarity
+```clarity
 (contract-call? .stacksbit-gateway register-merchant
   u"Lagos Coffee Shop"
   u"shop@lagoscoffee.com"
 )
-;; Returns: (ok u1) - merchant-id
-\\\
+;; Returns: (ok u1)
+```
 
-### Create Payment Request
-\\\clarity
+### Create a Payment Request
+
+```clarity
 (contract-call? .stacksbit-gateway create-payment-request
-  u50000000            ;; 0.5 sBTC
-  .sbtc                ;; token
-  u"Coffee & Pastry"
-  (some u500000)       ;; NGN rate (optional)
+  u50000000
+  .sbtc
+  u"Coffee x2"
+  none
 )
-;; Returns: (ok u1) - payment-id
-\\\
+;; Returns: (ok u1) -- share this payment-id with customer
+```
+
+### Customer Pays Invoice
+
+```clarity
+(contract-call? .stacksbit-gateway pay-invoice
+  u1
+  .sbtc
+  none
+)
+;; Funds locked in escrow
+```
 
 ### Confirm Delivery
-\\\clarity
+
+```clarity
 (contract-call? .stacksbit-gateway confirm-delivery
-  u1      ;; payment-id
-  .sbtc   ;; token
+  u1
+  .sbtc
 )
-;; Merchant receives 97.5% of amount
-;; Platform receives 2.5% fee
-\\\
+;; Merchant receives 97.5%, platform receives 2.5%
+```
+
+### Withdraw Funds
+
+```clarity
+(contract-call? .stacksbit-gateway withdraw
+  u50000000
+  .sbtc
+)
+```
 
 ## Security
 
-âœ… **Non-Custodial Design** â€” Funds held in smart contracts
-âœ… **Access Control** â€” All functions gated by authorization checks
-âœ… **Atomic Transfers** â€” Both fee and payout happen together or not at all
-âœ… **Emergency Pause** â€” Owner can pause contract if bugs discovered
+- Non-Custodial: Funds in auditable smart contracts
+- Access Control: All write functions gated by authorization
+- Atomic Transfers: Fee and payout happen together or not at all
+- Status Protection: Payment status tracked (pending, locked, settled, disputed)
+- Emergency Pause: Owner can pause all operations
 
-## Testing
+## Test Coverage
 
-Comprehensive test coverage with 28 passing tests:
-
-- **Merchant Registration (6)** - Registration, ID increment, duplicate prevention
-- **Payment Requests (4)** - Creation, validation, ID increment
-- **Escrow (2)** - Fund locking, access control
-- **Disputes (2)** - Dispute flagging, payment lookup
-- **Storage (4)** - Merchant lookup, balance queries
-- **Access Control (6)** - Owner functions, gateway functions, pause mechanism
-- **Fee Calculations (2)** - Standard and small amount fees
-
-Run tests:
-\\\ash
-npm test
-\\\
-
-## Deployment
-
-### Testnet Deployment
-
-\\\ash
-clarinet deployments generate --testnet
-clarinet deployments apply -n testnet
-\\\
-
-### Mainnet (Future)
-
-Coming after security audit and community feedback.
+| Category | Tests |
+|----------|-------|
+| Merchant Registration | 6 |
+| Payment Requests | 4 |
+| Escrow and Fund Locking | 2 |
+| Dispute Resolution | 2 |
+| Merchant Storage | 4 |
+| Access Control | 6 |
+| Fee Calculations | 2 |
+| **Total** | **28** |
 
 ## Project Stats
 
 | Metric | Value |
 |--------|-------|
-| **Lines of Clarity Code** | ~800 |
-| **Unit Tests** | 28 |
-| **Test Coverage** | 100% |
-| **Contracts** | 3 |
-| **Functions** | 24 public functions |
-| **Error Codes** | 28 organized by category |
+| Clarity contracts | 3 |
+| Public functions | 24 |
+| Unit tests | 28 |
+| Test coverage | 100% |
 
 ## Roadmap
 
-### Phase 1: MVP (Current âœ…)
-- âœ… Core contracts
-- âœ… 28 passing tests
-- âœ… Testnet ready
-- ðŸ”„ Security audit
+### Phase 1 - MVP (Complete)
+- 3 production-ready contracts
+- 28 passing unit tests
+- Testnet deployment ready
 
-### Phase 2: Naira Settlement (Q3 2026)
+### Phase 2 - Naira Settlement (Q3 2026)
 - Paystack/Flutterwave integration
-- Exchange rate oracle
-- Nigeria pilot
+- NGN/BTC exchange rate oracle
+- Nigeria merchant pilot
 
-### Phase 3: Multi-Token (Q4 2024)
+### Phase 3 - Multi-Token (Q4 2026)
 - USDC support
-- Additional tokens
+- Additional SIP-010 tokens
 
-### Phase 4: DAO (2025)
-- Community governance
-- Decentralized dispute resolution
+### Phase 4 - DAO Governance (2027)
+- Community-driven dispute resolution
+- Decentralized fee management
 
 ## Grant Applications
 
-### Stacks Grants
-- **Funding:** \ - \
-- **Focus:** Bitcoin payment infrastructure
-- **Apply:** https://grants.stacks.org
+### Stacks Grants ($15K - $30K)
+- Focus: Bitcoin payment infrastructure
+- Apply: https://grants.stacks.org
 
-### Superteam
-- **Funding:** \ - \
-- **Focus:** African Bitcoin infrastructure
-- **Apply:** https://superteam.fun
+### Superteam Microgrant ($5K - $10K)
+- Focus: African Bitcoin adoption
+- Apply: https://superteam.fun
 
 ## FAQ
 
-**Q: Is StacksBit custodial?**
-A: No. Funds held in smart contracts, never in company wallets.
+**Is StacksBit custodial?**
+No. Funds are held in Clarity smart contracts, never in company wallets.
 
-**Q: What tokens are supported?**
-A: sBTC currently. Any SIP-010 token can be added.
+**What tokens are supported?**
+sBTC currently. Any SIP-010 compatible token can be added.
 
-**Q: What's the fee?**
-A: 2.5% platform fee on successful transactions.
+**What is the platform fee?**
+2.5% on successful transactions, capped at 10%.
 
-**Q: When is mainnet?**
-A: After security audit. Estimated Q2/Q3 2026.
+**When is mainnet?**
+After security audit. Targeted for Q2/Q3 2026.
+
+**What is Naira settlement?**
+Merchants can opt to receive NGN. The contract records the obligation on-chain and a backend triggers Paystack/Flutterwave payout.
 
 ## License
 
-MIT License - see LICENSE for details.
+MIT License
 
 ## Contact
 
-- **GitHub:** https://github.com/rogersterkaa/StacksBit
-- **Email:** hello@stacksbit.io
+- GitHub: https://github.com/rogersterkaa/StacksBit
+- Email: rogersterkaa@gmail.com
 
 ---
 
-Built with â¤ï¸ for African merchants accepting Bitcoin.
+Built for African merchants. Powered by Bitcoin.
