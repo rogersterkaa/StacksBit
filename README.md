@@ -2,7 +2,7 @@
 **Bitcoin payments for African merchants. Simple. Safe. Non-custodial.**
 > Non-custodial Bitcoin payment gateway for African merchants, built on Stacks blockchain.
 
-![Tests](https://img.shields.io/badge/tests-28%2F28%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-31%2F31%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Problem
@@ -72,7 +72,7 @@ npm test
 
 ```
 Test Files  1 passed (1)
-     Tests  28 passed (28)
+     Tests  31 passed (31)
 ```
 
 ## Usage
@@ -148,7 +148,7 @@ Test Files  1 passed (1)
 | Merchant Storage | 4 |
 | Access Control | 6 |
 | Fee Calculations | 2 |
-| **Total** | **28** |
+| **Total** | **31** |
 
 ## Project Stats
 
@@ -156,14 +156,14 @@ Test Files  1 passed (1)
 |--------|-------|
 | Clarity contracts | 3 |
 | Public functions | 24 |
-| Unit tests | 28 |
+| Unit tests | 31 |
 | Test coverage | 100% |
 
 ## Roadmap
 
 ### Phase 1 - MVP (Complete)
 - 3 production-ready contracts
-- 28 passing unit tests
+- 31 passing unit tests
 - Testnet deployment ready
 
 ### Phase 2 - Naira Settlement (Q2/Q3 2026)
