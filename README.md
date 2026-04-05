@@ -4,6 +4,40 @@
 
 ![Tests](https://img.shields.io/badge/tests-31%2F31%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+![Network](https://img.shields.io/badge/network-Stacks%20Testnet-orange)
+![Status](https://img.shields.io/badge/status-live%20on%20testnet-brightgreen)
+
+## Live Deployment (Testnet)
+
+StacksBit is live on Stacks testnet. All contracts are deployed and verified.
+
+### Deployed Contract Addresses
+
+| Contract | Address |
+|----------|---------|
+| stacksbit-gateway | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-gateway` |
+| stacksbit-merchants | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-merchants` |
+| stacksbit-escrow | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow` |
+| sbtc | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` |
+| sip-010-trait | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sip-010-trait` |
+
+### Verified Transactions
+
+Full payment flow tested end-to-end on Stacks testnet:
+
+- register-merchant — confirmed
+- create-payment-request — confirmed
+- pay-invoice (funds locked in escrow) — confirmed
+- confirm-delivery (funds released to merchant) — confirmed
+
+Explorer: https://explorer.hiro.so/address/ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0?chain=testnet
+
+### Interact with Live Contracts
+
+Test the contracts directly on Stacks Explorer sandbox:
+https://explorer.hiro.so/sandbox/contract-call?chain=testnet
+
+Enter contract address: `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0`
 
 ## Problem
 
@@ -164,7 +198,8 @@ Test Files  1 passed (1)
 ### Phase 1 - MVP (Complete)
 - 3 production-ready contracts
 - 31 passing unit tests
-- Testnet deployment ready
+- Deployed and verified on Stacks testnet
+- Full payment flow tested on-chain
 
 ### Phase 2 - Naira Settlement (Q2/Q3 2026)
 - Paystack/Flutterwave integration
@@ -191,7 +226,7 @@ sBTC currently. Any SIP-010 compatible token can be added.
 2.5% on successful transactions, capped at 10%.
 
 **When is mainnet?**
-After security audit. Targeted for Q3 2026.
+Contracts are live on Stacks testnet. Mainnet deployment targeted for Q3 2026 after security audit.
 
 **What is Naira settlement?**
 Merchants can opt to receive NGN. The contract records the obligation on-chain and a backend triggers Paystack/Flutterwave payout.
