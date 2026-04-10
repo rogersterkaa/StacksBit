@@ -20,6 +20,7 @@ StacksBit is live on Stacks testnet. All contracts are deployed and verified.
 | stacksbit-escrow | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow` |
 | sbtc | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` |
 | sip-010-trait | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sip-010-trait` |
+| stacksbit-fraud | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud` |
 
 ### Verified Transactions
 
@@ -91,6 +92,7 @@ Contract   Contract
 - Naira Settlement Ready: Optional NGN payout via Paystack/Flutterwave
 - Simple Onboarding: Merchants register in seconds
 - Transparent Fees: 2.5% platform fee, capped at 10%
+- AI Fraud Detection: On-chain merchant reputation tracking with risk scoring API (green/yellow/red)
 
 ## Getting Started
 
