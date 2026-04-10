@@ -79,6 +79,11 @@ plan:
             path: contracts/stacksbit-escrow.clar
             clarity-version: 3
         - emulated-contract-publish:
+            contract-name: stacksbit-fraud
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/stacksbit-fraud.clar
+            clarity-version: 3
+        - emulated-contract-publish:
             contract-name: stacksbit-merchants
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/stacksbit-merchants.clar
