@@ -16,3 +16,6 @@ plan:
             anchor-block-only: true
             clarity-version: 3
       epoch: "3.2"
+Save, then run:
+powershellclarinet deployments apply --deployment-plan-path deployments\fraud.testnet-plan.yaml
+Type y to continue! 🚀Sonnet 4.6Extended
