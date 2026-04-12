@@ -21,6 +21,7 @@ StacksBit is live on Stacks testnet. All contracts are deployed and verified.
 | sbtc | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` |
 | sip-010-trait | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sip-010-trait` |
 | stacksbit-fraud | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud` |
+| stacksbit-fraud-v2 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud-v2` |
 
 ### Verified Transactions
 
@@ -93,6 +94,7 @@ Contract   Contract
 - Simple Onboarding: Merchants register in seconds
 - Transparent Fees: 2.5% platform fee, capped at 10%
 - AI Fraud Detection: On-chain merchant reputation tracking with risk scoring API (green/yellow/red)
+- Merchant Reputation System: On-chain trust scores (0-100) with badges (New, Rising, Trusted, Elite) that build automatically with every successful payment
 
 ## Getting Started
 
