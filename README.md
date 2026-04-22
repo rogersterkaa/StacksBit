@@ -97,6 +97,7 @@ Contract   Contract
 - AI Fraud Detection: On-chain merchant reputation tracking with risk scoring API (green/yellow/red)
 - Merchant Reputation System: On-chain trust scores (0-100) with badges (New, Rising, Trusted, Elite) that build automatically with every successful payment
 - Escrow Time Lock: Funds auto-refund to customer after 144 blocks (~24 hours) if merchant never delivers -- no admin needed, fully trustless
+- Offline Confirmation: Merchants confirm delivery via SMS or USSD (*384#) with zero internet needed. Works on any basic phone in Nigeria.
 
 ## Getting Started
 
