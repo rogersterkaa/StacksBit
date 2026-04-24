@@ -99,6 +99,53 @@ Contract   Contract
 - Escrow Time Lock: Funds auto-refund to customer after 144 blocks (~24 hours) if merchant never delivers -- no admin needed, fully trustless
 - Offline Confirmation: Merchants confirm delivery via SMS or USSD (*384#) with zero internet needed. Works on any basic phone in Nigeria.
 
+## 🌍 Real-World Readiness
+
+StacksBit is not a theory. It is built specifically 
+for how commerce actually works in emerging markets.
+
+### Built for Low-Connectivity Markets
+- **USSD confirmation** — merchants dial `*384*paymentID#` 
+  from any basic phone, zero internet required
+- **SMS confirmation** — merchant replies to SMS to 
+  release funds, works on the cheapest devices
+- **Agent-based confirmation** — trusted local agents 
+  can confirm on behalf of merchants in rural areas
+- No smartphone required to receive Bitcoin payments
+
+### Built for African Merchants
+- **Naira settlement ready** — merchants can opt to 
+  receive NGN via Paystack/Flutterwave instead of sBTC
+- **NGN rate stored on-chain** — every payment records 
+  the exchange rate at time of transaction
+- **Simple onboarding** — merchants register in seconds 
+  with just a business name and email
+- Designed for the 39 million Nigerian SMEs who are 
+  underserved by existing payment infrastructure
+
+### Trust Without Custody
+- Funds held in auditable Clarity smart contracts
+- No company wallet ever touches merchant funds
+- Automatic refund after 144 blocks (~24 hours) 
+  if merchant never delivers — fully trustless
+- Dispute resolution built into the protocol
+
+### Fraud Protection Built In
+- Every merchant has an on-chain reputation score
+- Dispute rate tracked automatically
+- Suspicious merchants flagged before payment
+- Blacklist system for known bad actors
+- Risk scores: 0 (safe) to 100 (blocked)
+
+### Proven on Stacks Testnet
+- All 4 contracts deployed and verified on-chain
+- Full payment flow tested end-to-end
+- 31 passing unit tests proving real money flows
+- Explorer: https://explorer.hiro.so/address/ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0?chain=testnet
+
+> "This is how a merchant in Nigeria accepts Bitcoin 
+> without trusting anyone."
+
 ## Getting Started
 
 ```bash
