@@ -138,7 +138,7 @@ for how commerce actually works in emerging markets.
 - Risk scores: 0 (safe) to 100 (blocked)
 
 ### Proven on Stacks Testnet
-- All 4 contracts deployed and verified on-chain
+- All 8 contracts deployed and verified on-chain
 - Full payment flow tested end-to-end
 - 31 passing unit tests proving real money flows
 - Explorer: https://explorer.hiro.so/address/ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0?chain=testnet
@@ -242,7 +242,7 @@ Test Files  1 passed (1)
 
 | Metric | Value |
 |--------|-------|
-| Clarity contracts | 3 |
+| Clarity contracts | 8 |
 | Public functions | 24 |
 | Unit tests | 31 |
 | Test coverage | 100% |
@@ -250,7 +250,7 @@ Test Files  1 passed (1)
 ## Roadmap
 
 ### Phase 1 - MVP (Complete)
-- 3 production-ready contracts
+- 8 production-ready contracts
 - 31 passing unit tests
 - Deployed and verified on Stacks testnet
 - Full payment flow tested on-chain
