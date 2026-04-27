@@ -287,10 +287,12 @@ Test Files  1 passed (1)
 - Cross-token escrow
 
 ### Phase 6 - DAO Governance (2027)
-- Community-driven dispute resolution
-- Decentralized fee management
-- Merchant reputation DAO voting
-- Dynamic threshold governance
+- 2-of-3 multi-sig arbitration
+  {merchant, customer, MNO-anchored oracle}
+- Reputation-staked community arbitrators
+- Sybil-resistant dispute resolution
+- MTN MoMo anchored trust primitive
+- Community-driven fee management
 
 ## FAQ
 
