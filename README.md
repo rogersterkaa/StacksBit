@@ -255,18 +255,42 @@ Test Files  1 passed (1)
 - Deployed and verified on Stacks testnet
 - Full payment flow tested on-chain
 
-### Phase 2 - Naira Settlement (Q2/Q3 2026)
+### Phase 2 - Trust Engine (In Progress)
+- ✅ Fraud detection with merchant reputation scores
+- ✅ Risk decision engine (blocked/ussd-required/auto-release)
+- ✅ Conditional USSD — only required for YELLOW zone merchants
+- ✅ Score decay — prevents reputation abuse over time
+- ✅ First interaction risk — flags new customer relationships
+- ⏳ Dynamic threshold engine — cohort-aware risk scoring
+- ⏳ Merchant segment detection — Lagos merchant vs rural merchant
+- ⏳ Adaptive threshold functions — thresholds as functions not constants
+- ⏳ Fraud rate monitoring per confirmation path
+- ⏳ Mid-flight dispute resolution architecture
+- ⏳ Time-delay on dispute resolution (2hr evidence window)
+
+### Phase 3 - Naira Settlement (Q3 2026)
 - Paystack/Flutterwave integration
 - NGN/BTC exchange rate oracle
-- Nigeria merchant pilot
+- Nigeria merchant pilot (10 merchants in Lagos)
+- Offline USSD/SMS confirmation layer production-ready
 
-### Phase 3 - Multi-Token (Q4 2026)
+### Phase 4 - Frontend & UX (Q3 2026)
+- Simple merchant dashboard
+- Payment link generation
+- QR code payments
+- Risk badge display (GREEN/YELLOW/RED)
+- Mobile-responsive design
+
+### Phase 5 - Multi-Token (Q4 2026)
 - USDC support
 - Additional SIP-010 tokens
+- Cross-token escrow
 
-### Phase 4 - DAO Governance (2027)
+### Phase 6 - DAO Governance (2027)
 - Community-driven dispute resolution
 - Decentralized fee management
+- Merchant reputation DAO voting
+- Dynamic threshold governance
 
 ## FAQ
 
