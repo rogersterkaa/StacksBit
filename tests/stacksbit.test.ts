@@ -119,7 +119,7 @@ describe("Full Payment Flow - Happy Path", () => {
 
     // Create payment request
     simnet.callPublicFn(GATEWAY, "create-payment-request",
-      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none()], merchant1);
+      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none(), Cl.stringAscii("btc")], merchant1);
 
     // Customer pays invoice
     simnet.callPublicFn(GATEWAY, "pay-invoice",
@@ -127,7 +127,7 @@ describe("Full Payment Flow - Happy Path", () => {
 
     // Customer confirms delivery
     simnet.callPublicFn(GATEWAY, "confirm-delivery",
-      [Cl.uint(1), Cl.principal(SBTC_CONTRACT)], customer1);
+      [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
 
     // Merchant withdraws
     const withdrawResult = simnet.callPublicFn(GATEWAY, "withdraw",
@@ -141,13 +141,13 @@ describe("Full Payment Flow - Happy Path", () => {
     simnet.callPublicFn(GATEWAY, "register-merchant",
       [Cl.stringUtf8("Lagos Coffee Shop"), Cl.stringUtf8("shop@lagoscoffee.com")], merchant1);
     simnet.callPublicFn(GATEWAY, "create-payment-request",
-      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none()], merchant1);
+      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none(), Cl.stringAscii("btc")], merchant1);
     simnet.callPublicFn(GATEWAY, "pay-invoice",
       [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
     
     // Confirm delivery to settle
     simnet.callPublicFn(GATEWAY, "confirm-delivery",
-      [Cl.uint(1), Cl.principal(SBTC_CONTRACT)], customer1);
+      [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
 
     // Check merchant balance
     const balance = simnet.callReadOnlyFn(MERCHANTS, "get-merchant-balance",
@@ -160,7 +160,7 @@ describe("Full Payment Flow - Happy Path", () => {
     simnet.callPublicFn(GATEWAY, "register-merchant",
       [Cl.stringUtf8("Lagos Coffee Shop"), Cl.stringUtf8("shop@lagoscoffee.com")], merchant1);
     simnet.callPublicFn(GATEWAY, "create-payment-request",
-      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none()], merchant1);
+      [Cl.uint(10000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Coffee x2"), Cl.none(), Cl.stringAscii("btc")], merchant1);
 
     // Payment should exist
     let payment = simnet.callReadOnlyFn(MERCHANTS, "get-payment",
@@ -173,7 +173,7 @@ describe("Full Payment Flow - Happy Path", () => {
 
     // Customer confirms
     simnet.callPublicFn(GATEWAY, "confirm-delivery",
-      [Cl.uint(1), Cl.principal(SBTC_CONTRACT)], customer1);
+      [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
 
     // Payment should still exist
     payment = simnet.callReadOnlyFn(MERCHANTS, "get-payment",
@@ -188,7 +188,7 @@ describe("Dispute Flow - Real Money", () => {
     simnet.callPublicFn(GATEWAY, "register-merchant", 
       [Cl.stringUtf8("Test Merchant"), Cl.stringUtf8("test@merchant.com")], merchant1);
     simnet.callPublicFn(GATEWAY, "create-payment-request", 
-      [Cl.uint(1000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Test"), Cl.none()], merchant1);
+      [Cl.uint(1000000), Cl.principal(SBTC_CONTRACT), Cl.stringUtf8("Test"), Cl.none(), Cl.stringAscii("btc")], merchant1);
     simnet.callPublicFn(GATEWAY, "pay-invoice", 
       [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
   });
@@ -215,7 +215,7 @@ describe("Dispute Flow - Real Money", () => {
 
   it("cannot dispute already settled payment", () => {
     // Confirm delivery first to settle
-    simnet.callPublicFn(GATEWAY, "confirm-delivery", [Cl.uint(1), Cl.principal(SBTC_CONTRACT)], customer1);
+    simnet.callPublicFn(GATEWAY, "confirm-delivery", [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
     
     // Now try to dispute settled payment
     const result = simnet.callPublicFn(GATEWAY, "raise-dispute", [Cl.uint(1)], customer1);
@@ -226,7 +226,7 @@ describe("Dispute Flow - Real Money", () => {
   it("cannot dispute already settled payment", () => {
   // Confirm delivery first to settle the payment
   simnet.callPublicFn(GATEWAY, "confirm-delivery",
-    [Cl.uint(1), Cl.principal(SBTC_CONTRACT)], customer1);
+    [Cl.uint(1), Cl.principal(SBTC_CONTRACT), Cl.none()], customer1);
   // Now try to dispute the settled payment
   const result = simnet.callPublicFn(GATEWAY, "raise-dispute", [Cl.uint(1)], customer1);
   expect(result.result).toBeErr(Cl.uint(312));

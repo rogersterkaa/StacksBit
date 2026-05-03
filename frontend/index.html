@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StacksBit — Bitcoin Payments for African Merchants</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F8F9FB; color: #1A1A1A; font-size: 14px; }
+    .app { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar { width: 220px; background: white; border-right: 1px solid #EBEBEB; padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; position: fixed; height: 100vh; }
+    .logo { display: flex; align-items: center; gap: 8px; padding: 0 0.5rem 1rem; border-bottom: 1px solid #EBEBEB; margin-bottom: 0.5rem; }
+    .logo-icon { width: 28px; height: 28px; background: #F7931A; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 13px; }
+    .logo-text { font-weight: 600; font-size: 15px; }
+    .logo-sub { font-size: 10px; color: #888; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; color: #666; font-size: 13px; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; }
+    .nav-item:hover { background: #F8F9FB; color: #1A1A1A; }
+    .nav-item.active { background: #FFF3E0; color: #E65100; }
+    .nav-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #EBEBEB; font-size: 11px; color: #aaa; padding-left: 0.5rem; }
+
+    /* Main */
+    .main { flex: 1; margin-left: 220px; display: flex; flex-direction: column; }
+    .topbar { background: white; border-bottom: 1px solid #EBEBEB; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-size: 15px; font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .content { padding: 1.5rem; }
+
+    /* Badges */
+    .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+    .badge-orange { background: #FFF3E0; color: #E65100; }
+    .badge-green { background: #E8F5E9; color: #2E7D32; }
+    .badge-yellow { background: #FFFDE7; color: #F57F17; }
+    .badge-red { background: #FFEBEE; color: #C62828; }
+
+    /* Cards */
+    .card { background: white; border: 1px solid #EBEBEB; border-radius: 12px; padding: 1rem 1.25rem; }
+    .metric-card { background: #F8F9FB; border-radius: 8px; padding: 1rem; }
+    .metric-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+    .metric-value { font-size: 22px; font-weight: 600; }
+    .metric-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+    /* Grid */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+
+    /* Buttons */
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid #EBEBEB; background: white; color: #1A1A1A; transition: all 0.15s; }
+    .btn:hover { background: #F8F9FB; }
+    .btn-primary { background: #F7931A; color: white; border-color: #F7931A; }
+    .btn-primary:hover { background: #E08010; border-color: #E08010; }
+    .btn-danger { background: white; color: #DC2626; border-color: #DC2626; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* Forms */
+    .form-group { margin-bottom: 1rem; }
+    .form-label { font-size: 12px; color: #666; margin-bottom: 4px; display: block; }
+    .form-input { width: 100%; padding: 8px 10px; border: 1px solid #EBEBEB; border-radius: 8px; background: white; color: #1A1A1A; font-size: 13px; font-family: inherit; outline: none; }
+    .form-input:focus { border-color: #F7931A; }
+    .form-select { width: 100%; padding: 8px 10px; border: 1px solid #EBEBEB; border-radius: 8px; background: white; color: #1A1A1A; font-size: 13px; font-family: inherit; outline: none; }
+
+    /* Transaction rows */
+    .tx-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F5F5F5; }
+    .tx-row:last-child { border-bottom: none; }
+    .tx-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .tx-info { flex: 1; }
+    .tx-name { font-size: 13px; font-weight: 500; }
+    .tx-meta { font-size: 11px; color: #888; }
+
+    /* Flow steps */
+    .flow-steps { display: flex; align-items: flex-start; margin: 1rem 0; }
+    .step-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; border: 1px solid #EBEBEB; }
+    .step-line { height: 2px; flex: 1; margin-top: 13px; }
+    .step-connector { display: flex; align-items: flex-start; flex: 1; }
+    .step-label { font-size: 10px; color: #888; text-align: center; margin-top: 4px; white-space: nowrap; }
+
+    /* Trust */
+    .trust-bar { height: 6px; background: #F5F5F5; border-radius: 3px; overflow: hidden; margin: 6px 0; }
+    .trust-fill { height: 100%; border-radius: 3px; }
+    .trust-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+
+    /* USSD */
+    .ussd-box { background: #1A1A1A; color: #F7931A; font-family: monospace; font-size: 12px; padding: 1rem; border-radius: 8px; line-height: 1.8; }
+    .ussd-line { color: #ccc; }
+
+    /* Misc */
+    .section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+    .alert-card { border-left: 3px solid #F7931A; padding: 10px 12px; border-radius: 0 8px 8px 0; background: #FFF3E0; margin-bottom: 8px; }
+    .non-custodial-note { display: flex; align-items: center; gap: 8px; background: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #2E7D32; margin-top: 0.5rem; }
+    .copy-link { display: flex; align-items: center; gap: 8px; background: #F8F9FB; border: 1px solid #EBEBEB; border-radius: 8px; padding: 8px 12px; margin: 1rem 0; }
+    .copy-link-text { flex: 1; font-size: 12px; color: #888; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .step-pill { flex: 1; height: 3px; border-radius: 2px; background: #F5F5F5; }
+    .step-pill.done { background: #F7931A; }
+    .step-indicator { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+    .risk-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #F5F5F5; }
+    .risk-row:last-child { border-bottom: none; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .merchant-avatar { width: 40px; height: 40px; border-radius: 50%; background: #FFF3E0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #E65100; flex-shrink: 0; }
+    .payment-card { border: 1px solid #EBEBEB; border-radius: 12px; overflow: hidden; }
+    .payment-header { background: #1A1A1A; padding: 1.25rem; color: white; }
+    .payment-body { padding: 1.25rem; background: white; }
+    .escrow-note { display: flex; align-items: center; gap: 8px; background: #FFF3E0; border: 1px solid #F7931A; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #E65100; margin: 1rem 0; }
+    .page { display: none; }
+    .page.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">SB</div>
+      <div>
+        <div class="logo-text">StacksBit</div>
+        <div class="logo-sub">Bitcoin Payments</div>
+      </div>
+    </div>
+    <button class="nav-item active" onclick="showPage('dashboard')">&#9632; Dashboard</button>
+    <button class="nav-item" onclick="showPage('register')">&#9633; Register Merchant</button>
+    <button class="nav-item" onclick="showPage('create')">+ Create Payment</button>
+    <button class="nav-item" onclick="showPage('pay')">&#9651; Pay Invoice</button>
+    <button class="nav-item" onclick="showPage('confirm')">&#10003; Confirm Delivery</button>
+    <button class="nav-item" onclick="showPage('risk')">&#9650; Risk Panel</button>
+    <div class="nav-footer">
+      <div style="margin-bottom: 4px;">ST3G...DS4Q0</div>
+      <div>Testnet</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <span class="badge badge-orange">Testnet</span>
+        <span class="badge badge-green">&#9679; Connected</span>
+        <button class="btn btn-primary btn-sm" onclick="showPage('create')">+ New Payment</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="grid-4">
+          <div class="metric-card">
+            <div class="metric-label">Available Balance</div>
+            <div class="metric-value" style="color: #16A34A;">499.98</div>
+            <div class="metric-sub">STX testnet</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Locked in Escrow</div>
+            <div class="metric-value" style="color: #F7931A;">0.02</div>
+            <div class="metric-sub">sBTC • 1 payment</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Pending Confirmations</div>
+            <div class="metric-value" style="color: #DC2626;">2</div>
+            <div class="metric-sub">Awaiting delivery</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Released</div>
+            <div class="metric-value">0.10</div>
+            <div class="metric-sub">sBTC all time</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="section-title">Merchant reputation</div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <div class="merchant-avatar">TT</div>
+              <div style="flex: 1;">
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 3px;">TestShop</div>
+                <span class="trust-badge badge-green">&#9679; Trusted Merchant</span>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 24px; font-weight: 600; color: #16A34A;">78</div>
+                <div style="font-size: 11px; color: #888;">Trust score</div>
+              </div>
+            </div>
+            <div class="trust-bar">
+              <div class="trust-fill" style="width: 78%; background: #16A34A;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #888;">
+              <span>Risk: Low (12)</span>
+              <span>Disputes: 0</span>
+              <span>Payments: 3</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">Transaction flow — Payment #1</div>
+            <div style="display: flex; align-items: flex-start; margin: 1rem 0;">
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="step-dot" style="background: #E8F5E9; color: #2E7D32; border-color: #2E7D32;">&#10003;</div>
+                <div class="step-label">Created</div>
+              </div>
+              <div style="flex: 1; height: 2px; background: #2E7D32; margin-top: 13px;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="step-dot" style="background: #E8F5E9; color: #2E7D32; border-color: #2E7D32;">&#10003;</div>
+                <div class="step-label">Paid</div>
+              </div>
+              <div style="flex: 1; height: 2px; background: #F7931A; margin-top: 13px;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="step-dot" style="background: #FFF3E0; color: #F7931A; border-color: #F7931A;">&#9632;</div>
+                <div class="step-label">Locked</div>
+              </div>
+              <div style="flex: 1; height: 2px; background: #EBEBEB; margin-top: 13px;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="step-dot" style="color: #ccc;">&#9675;</div>
+                <div class="step-label">Confirmed</div>
+              </div>
+              <div style="flex: 1; height: 2px; background: #EBEBEB; margin-top: 13px;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="step-dot" style="color: #ccc;">&#9675;</div>
+                <div class="step-label">Released</div>
+              </div>
+            </div>
+            <div style="background: #FFF3E0; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #E65100;">
+              Funds locked in escrow. Awaiting delivery confirmation.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 12px;">
+          <div class="section-title">Recent transactions</div>
+          <div class="tx-row">
+            <div class="tx-icon" style="background: #E8F5E9; color: #2E7D32;">&#10003;</div>
+            <div class="tx-info">
+              <div class="tx-name">register-merchant</div>
+              <div class="tx-meta">TestShop • 0xe0...f0d6b • 4 mins ago</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; font-weight: 500; color: #888;">4,410 µSTX</div>
+              <span class="badge badge-green" style="font-size: 10px;">Success</span>
+            </div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-icon" style="background: #FFF3E0; color: #F7931A;">&#9632;</div>
+            <div class="tx-info">
+              <div class="tx-name">create-payment-request</div>
+              <div class="tx-meta">Payment #1 • 0x09...e4ef6 • 11 mins ago</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; font-weight: 500; color: #F7931A;">1,000,000 µsBTC</div>
+              <span class="badge badge-orange" style="font-size: 10px;">Locked</span>
+            </div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-icon" style="background: #E8F5E9; color: #2E7D32;">&#10003;</div>
+            <div class="tx-info">
+              <div class="tx-name">set-gateway</div>
+              <div class="tx-meta">stacksbit-merchants • 0xa3...fd69b • 23 mins ago</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; font-weight: 500; color: #888;">3,750 µSTX</div>
+              <span class="badge badge-green" style="font-size: 10px;">Success</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Alerts</div>
+          <div class="alert-card">
+            <div style="font-size: 13px; font-weight: 600;">Payment #1 awaiting delivery confirmation</div>
+            <div style="font-size: 12px; color: #888; margin-top: 2px;">Escrow expires in ~138 blocks (~23 hrs). Confirm via USSD *384# or web.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="page" id="page-register">
+        <div style="max-width: 480px;">
+          <div class="card">
+            <div style="margin-bottom: 1.5rem;">
+              <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">Register as a merchant</div>
+              <div style="font-size: 12px; color: #888;">Start accepting Bitcoin payments in seconds</div>
+            </div>
+            <div class="step-indicator">
+              <div class="step-pill done" id="pill1"></div>
+              <div class="step-pill" id="pill2"></div>
+            </div>
+            <div id="reg-step1">
+              <div class="form-group">
+                <label class="form-label">Business name</label>
+                <input class="form-input" type="text" placeholder="e.g. Lagos Coffee Shop" id="biz-name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email address</label>
+                <input class="form-input" type="email" placeholder="shop@example.com" id="biz-email" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone (for USSD confirmation)</label>
+                <input class="form-input" type="tel" placeholder="+234 800 000 0000" />
+              </div>
+              <button class="btn btn-primary" style="width: 100%;" onclick="nextReg()">Continue &rarr;</button>
+            </div>
+            <div id="reg-step2" style="display: none;">
+              <div class="form-group">
+                <label class="form-label">Business type</label>
+                <select class="form-select">
+                  <option>Retail</option>
+                  <option>Food & Beverage</option>
+                  <option>Freelancer</option>
+                  <option>Services</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Stacks wallet address</label>
+                <input class="form-input" type="text" placeholder="ST3G...DS4Q0" />
+              </div>
+              <div class="non-custodial-note">
+                &#128274; Your funds are non-custodial. StacksBit never holds your money.
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 1rem;">
+                <button class="btn" style="flex: 1;" onclick="prevReg()">&larr; Back</button>
+                <button class="btn btn-primary" style="flex: 2;" onclick="regSuccess()">Create Merchant</button>
+              </div>
+            </div>
+            <div id="reg-success" style="display: none; text-align: center; padding: 1rem 0;">
+              <div style="font-size: 40px; color: #16A34A; margin-bottom: 8px;">&#10003;</div>
+              <div style="font-size: 15px; font-weight: 600; color: #16A34A; margin-bottom: 4px;">Merchant registered!</div>
+              <div style="font-size: 12px; color: #888; margin-bottom: 1rem;">Welcome to StacksBit. Start accepting Bitcoin payments.</div>

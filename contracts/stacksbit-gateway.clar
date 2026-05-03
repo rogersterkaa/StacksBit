@@ -43,6 +43,7 @@
   (token-contract <sip-010-trait>)
   (description (string-utf8 256))
   (ngn-rate (optional uint))
+  (settlement-type (string-ascii 3))
 )
   (let (
     (caller tx-sender)
@@ -53,7 +54,7 @@
     (asserts! (> amount u0) ERR-INVALID-AMOUNT)
     (asserts! (get is-active merchant) ERR-MERCHANT-INACTIVE)
     (let ((payment-id (try! (as-contract (contract-call? .stacksbit-merchants create-payment merchant-id amount (contract-of token-contract) description)))))
-      (print { event: "payment-request-created", payment-id: payment-id, merchant-id: merchant-id, amount: amount, ngn-rate: ngn-rate })
+      (print { event: "payment-request-created", payment-id: payment-id, merchant-id: merchant-id, amount: amount, ngn-rate: ngn-rate, settlement-type: settlement-type })
       (ok payment-id)
     )
   )
@@ -84,6 +85,7 @@
 (define-public (confirm-delivery
   (payment-id uint)
   (token <sip-010-trait>)
+  (ngn-rate (optional uint))
 )
   (let (
     (caller tx-sender)
