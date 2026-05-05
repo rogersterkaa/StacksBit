@@ -13,17 +13,17 @@ StacksBit is live on Stacks testnet. All contracts are deployed and verified.
 
 ### Deployed Contract Addresses
 
-| Contract | Address |
-|----------|---------|
-| stacksbit-gateway | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-gateway` |
-| stacksbit-merchants | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-merchants` |
-| stacksbit-escrow | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow` |
-| sbtc | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` |
-| sip-010-trait | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sip-010-trait` |
-| stacksbit-fraud | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud` |
-| stacksbit-fraud-v2 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud-v2` |
-| stacksbit-escrow-v2 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow-v2` |
-
+| Contract | Address | Version |
+|----------|---------|---------|
+| stacksbit-gateway | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-gateway` | v1 |
+| stacksbit-gateway-v2 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-gateway-v2` | v2 — NGN settlement |
+| stacksbit-merchants | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-merchants` | v1 |
+| stacksbit-escrow | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow` | v1 |
+| stacksbit-escrow-v2 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow-v2` | v2 — time lock |
+| stacksbit-fraud | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud` | v1 |
+| stacksbit-fraud-v3 | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud-v3` | v3 — trust engine |
+| sbtc | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` | v1 |
+| sip-010-trait | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sip-010-trait` | v1 |
 ### Verified Transactions
 
 Full payment flow tested end-to-end on Stacks testnet:
@@ -98,6 +98,8 @@ Contract   Contract
 - Merchant Reputation System: On-chain trust scores (0-100) with badges (New, Rising, Trusted, Elite) that build automatically with every successful payment
 - Escrow Time Lock: Funds auto-refund to customer after 144 blocks (~24 hours) if merchant never delivers -- no admin needed, fully trustless
 - Offline Confirmation: Merchants confirm delivery via SMS or USSD (*384#) with zero internet needed. Works on any basic phone in Nigeria.
+- NGN Settlement Ready: Backend listener detects payment releases and triggers Paystack NGN payout automatically
+- Settlement Backend: Node.js/TypeScript service with FX conversion, webhook handling, and manual trigger endpoint
 
 ## 🌍 Real-World Readiness
 
@@ -242,7 +244,7 @@ Test Files  1 passed (1)
 
 | Metric | Value |
 |--------|-------|
-| Clarity contracts | 8 |
+| Clarity contracts | 9 |
 | Public functions | 24 |
 | Unit tests | 31 |
 | Test coverage | 100% |
