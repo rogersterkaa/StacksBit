@@ -4,7 +4,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-stacksbit--app.vercel.app-orange)](https://stacksbit-app.vercel.app)
 [![Network](https://img.shields.io/badge/Network-Stacks%20Testnet-blue)](https://explorer.hiro.so)
-[![Tests](https://img.shields.io/badge/Tests-31%20Passing-brightgreen)](../../USER/Downloads/main_readme (5).md#)
+[![Tests](https://img.shields.io/badge/Tests-31%20Passing-brightgreen)](#)
 [![License](https://img.shields.io/badge/License-MIT-green)](../../USER/Downloads/LICENSE)
 
 ---
