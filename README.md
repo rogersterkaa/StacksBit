@@ -1,53 +1,70 @@
-# StacksBit — Bitcoin Payment Gateway for African Merchants
+# StacksBit
 
-> Trustless Bitcoin payments with smart contract escrow, fraud detection, and offline USSD confirmation — built on Stacks (Bitcoin L2)
+**Fraud-protection infrastructure for African commerce — built on Stacks (Bitcoin L2)**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-stacksbit--app.vercel.app-orange)](https://stacksbit-app.vercel.app)
-[![Network](https://img.shields.io/badge/Network-Stacks%20Testnet-blue)](https://explorer.hiro.so)
-[![Tests](https://img.shields.io/badge/Tests-31%20Passing-brightgreen)](#)
-[![License](https://img.shields.io/badge/License-MIT-green)](../../USER/Downloads/LICENSE)
-
----
-
-## 🌍 Problem
-
-African merchants face three critical barriers to Bitcoin adoption:
-
-- **Trust** — No escrow mechanism for online commerce
-- **Fraud** — No reputation system for new merchants
-- **Connectivity** — No offline payment confirmation for low-connectivity regions
-
-## 💡 Solution
-
-StacksBit is a non-custodial Bitcoin payment gateway that solves all three:
-
-- **Smart contract escrow** — Funds locked on-chain until delivery confirmed
-- **AI Fraud Detection Layer** — On-chain merchant reputation scoring (0–100 risk score)
-- **Offline USSD confirmation** — Delivery confirmed via SMS on any phone, no internet needed
+> "Send money first and pray" is how most online commerce works in Nigeria today.  
+> Buyers get scammed by fake vendors. Merchants get scammed by fake buyers.  
+> Both sides lose. Every day. With no recourse.  
+>
+> StacksBit fixes this.
 
 ---
 
-## 🏗️ System Architecture
+## What StacksBit Is
+
+StacksBit is **not** a payment gateway. It is a **trust layer**.
+
+Payment is the mechanism. Fraud protection is the point.
+
+When a buyer pays through StacksBit, funds lock in a Bitcoin-secured smart contract escrow. Neither party can access them until delivery is confirmed. The merchant cannot run off with the money without delivering. The buyer cannot claim non-delivery after receiving goods. Both sides are protected by code, not by trust.
+
+---
+
+## The Problem — Validated With Real Merchants
+
+Through the Stacks Foundry Validate program (5-week structured validation), we interviewed and ran pilot sessions with merchants in Jos, Plateau State, Nigeria:
+
+- **Every merchant confirmed** experiencing payment fraud or buyer disputes
+- **Every merchant resolves disputes manually** — through banks, bank statements, or legal authorities
+- **Every merchant said yes** to a system that holds payment until delivery is confirmed
+- **Two merchants independently asked** the same unprompted question: *"What does the customer need to do?"* — confirming the pain runs **both directions**
+
+The reframe that emerged from validation:
+
+> StacksBit is not a merchant tool with a buyer side.  
+> It is bilateral fraud protection where both sides have equal skin in the game.
+
+---
+
+## How It Works
+
+```
+Merchant creates invoice → Customer pays into escrow → Funds locked on-chain
+→ Merchant delivers → Customer confirms → Funds released automatically
+→ Dispute? Funds stay locked until resolved
+```
+
+Nobody cheats. Nobody disappears. Both sides are protected.
+
+---
+
+## Architecture
 
 ```mermaid
 graph TD
     A[Merchant Dashboard] --> B[StacksBit Gateway]
-    B --> C[Escrow Contract]
-    B --> D[Merchant Registry]
-    B --> E[Fraud Engine]
-    C --> F[sBTC Locked]
-    F --> G[Settlement]
-    G --> H[Paystack NGN Settlement]
-    E --> I[Risk Score 0-100]
-    J[USSD / SMS Layer] --> B
-    I -->|0-39| K[🟢 Auto Release]
-    I -->|40-69| L[🟡 USSD Required]
-    I -->|70-100| M[🔴 Blocked]
+    C[Buyer / Customer] --> B
+    B --> D[Escrow Contract]
+    B --> E[Merchant Registry]
+    B --> F[Fraud Engine]
+    D --> G[sBTC Locked]
+    G --> H[Settlement on Confirmation]
+    F --> I[Risk Score 0-100]
 ```
 
 ---
 
-## 💳 Payment Flow
+## Payment Flow
 
 ```mermaid
 sequenceDiagram
@@ -56,40 +73,36 @@ sequenceDiagram
     participant Gateway
     participant Escrow
 
+    Merchant->>Gateway: Register business
     Merchant->>Gateway: Create invoice
-    Gateway->>Customer: Payment request
+    Gateway->>Customer: Share Payment ID
     Customer->>Escrow: Pay sBTC
-    Escrow->>Merchant: Await delivery confirmation
-    Merchant->>Gateway: Confirm delivery
+    Escrow->>Merchant: Funds locked — await delivery
+    Merchant->>Customer: Deliver goods
+    Customer->>Gateway: Confirm delivery
     Gateway->>Escrow: Release funds
-    Escrow->>Merchant: Settlement complete (minus 2.5% fee)
+    Escrow->>Merchant: Settlement complete
 ```
 
 ---
 
-## 🛡️ Fraud Detection Engine
+## Fraud Detection Engine
 
 ```mermaid
 flowchart TD
     A[New Transaction] --> B{Merchant Risk Score}
-    B -->|0 - 39| C[🟢 GREEN ZONE]
-    B -->|40 - 69| D[🟡 YELLOW ZONE]
-    B -->|70 - 100| E[🔴 RED ZONE]
-    C --> F[Instant Auto-Release]
-    D --> G[USSD Confirmation Required]
-    E --> H[Payment Blocked — Manual Review]
+    B -->|0–39| C[GREEN — Auto-release]
+    B -->|40–69| D[YELLOW — Extra verification]
+    B -->|70–100| E[RED — Manual review]
 ```
 
-**Scoring factors:**
-- Dispute rate (rolling 30-day window)
-- New merchant penalty (< 5 payments = +20 risk)
-- First interaction risk (+15 for new customer-merchant pairs)
-- Payment spike detection (10x average = +25 risk)
-- Score decay — reputation recovers over time
+Signals monitored: dispute rate, delivery time, refund history, repeat customers, transaction volume.
 
 ---
 
-## 📱 Offline USSD Confirmation Flow
+## Offline USSD Confirmation — Phase 2
+
+For low-connectivity regions where merchants cannot access the internet reliably:
 
 ```mermaid
 sequenceDiagram
@@ -100,94 +113,126 @@ sequenceDiagram
 
     Merchant->>USSD: Dial *384#
     USSD->>Backend: Submit Payment ID
-    Backend->>Blockchain: Verify escrow status
-    Backend->>Merchant: Request OTP
+    Backend->>Blockchain: Verify escrow
+    Backend->>Merchant: Send OTP via SMS
     Merchant->>Backend: Submit OTP
-    Backend->>Blockchain: Confirm delivery
+    Backend->>Blockchain: confirm-delivery
     Blockchain->>Merchant: Funds released
 ```
 
-No internet required. Works on any phone in Nigeria.
+> USSD layer is in development (Phase 2). Africa's Talking API integration planned.
 
 ---
 
-## ✅ Live on Stacks Testnet
+## Current State
+
+### Smart Contracts — Live on Stacks Testnet
 
 | Contract | Address |
 |----------|---------|
-| `stacksbit-gateway` | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-gateway` |
-| `stacksbit-merchants` | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-merchants` |
-| `stacksbit-escrow` | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-escrow` |
-| `stacksbit-fraud-v3` | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.stacksbit-fraud-v3` |
-| `sbtc` (mock token) | `ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0.sbtc` |
+| stacksbit-gateway | ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0 |
+| stacksbit-escrow | ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0 |
+| stacksbit-merchants | ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0 |
+| stacksbit-fraud-v3 | ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0 |
+| sbtc | ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0 |
 
-**31 unit tests passing. Full end-to-end payment flow verified on-chain.**
+**Full payment lifecycle verified on-chain:**  
+`register-merchant → create-payment-request → pay-invoice → confirm-delivery → dispute`
 
----
+### Frontend — Live
 
-## 🚀 Getting Started
+- **Live app:** https://stacksbit-react.vercel.app
+- **GitHub (frontend):** https://github.com/rogersterkaa/stacksbit-react
+- Built in React + TypeScript (Vite)
+- Mobile-functional via Leather wallet dapp browser
+- Role-based UI — merchants and buyers see different navigation
+- Separate merchant and buyer wallet slots — two-sided transactions work
 
-### Prerequisites
-- [Clarinet](https://github.com/hirosystems/clarinet)
-- [Node.js](https://nodejs.org) v18+
-- [Leather Wallet](https://leather.io)
+### What Works Today
 
-### Run Smart Contract Tests
+- ✅ Merchant registration (on-chain)
+- ✅ Payment request creation with real Payment ID display
+- ✅ Escrow payment locking (buyer pays into contract)
+- ✅ Delivery confirmation (funds release to merchant)
+- ✅ Dispute flow (funds held pending resolution)
+- ✅ On-chain transaction history
+- ✅ Fraud risk scoring display
+- ✅ Mobile UI via Leather dapp browser
+- ✅ Role-based merchant/buyer entry point
 
-```bash
-git clone https://github.com/rogersterkaa/StacksBit.git
-cd StacksBit
-clarinet test
-```
+### In Development (Phase 2)
 
-### Run Frontend Locally
-
-```bash
-git clone https://github.com/rogersterkaa/StacksBit-Frontend.git
-cd StacksBit-Frontend
-npm install
-npm run dev
-```
-
-Open `http://localhost:5173` and connect your Leather wallet.
-
----
-
-## 📁 Project Structure
-
-```
-StacksBit/
-├── contracts/
-│   ├── stacksbit-gateway.clar       # Main orchestration contract
-│   ├── stacksbit-gateway-v2.clar    # Updated gateway with settlement types
-│   ├── stacksbit-merchants.clar     # Merchant profiles & payment records
-│   ├── stacksbit-escrow.clar        # Trustless escrow engine
-│   ├── stacksbit-fraud-v3.clar      # AI fraud detection & reputation
-│   ├── sbtc.clar                    # Mock sBTC SIP-010 token
-│   └── sip-010-trait.clar           # SIP-010 token standard
-├── tests/                           # 31 unit tests
-└── README.md
-```
+- 🔧 USSD offline confirmation (Africa's Talking API)
+- 🔧 NGN settlement via Paystack
+- 🔧 AI fraud detection layer
+- 🔧 Mainnet deployment
 
 ---
 
-## 🔗 Links
+## Validation Evidence
 
-- **Live Demo**: [stacksbit-app.vercel.app](https://stacksbit-app.vercel.app)
-- **Frontend Repo**: [github.com/rogersterkaa/StacksBit-Frontend](https://github.com/rogersterkaa/StacksBit-Frontend)
-- **Explorer**: [View contracts on Hiro Explorer](https://explorer.hiro.so/address/ST3GTDAAVRPKHCC45FFW0540MPTDHGWWRMB5DS4Q0?chain=testnet)
+Validated through **Stacks Foundry Validate** (5-week structured program, Q2 2026):
+
+| Actor | Type | Signal |
+|-------|------|--------|
+| Donald Aondoakura (Errandboy Logistics, Jos) | Merchant | Completed walkthrough, asked "what do I do next?" |
+| Elias Ahile (Brisk Global, Jos) | Merchant | Multiple follow-up calls, asked about dispute resolution time |
+| Jaram Comfort Mayat (LiveBetter Fashion, Jos) | Merchant | Confirmed fraud pain, willing to adopt |
+| Lucy Ejembi | Buyer | Opened app independently, explored flow without prompting |
+| Tristan Linardos (Lorica) | Ecosystem | Sustained architectural engagement, open channel |
+| Parth Goel | Web3 Builder | Deep technical feedback on escrow/reputation architecture |
+
+**Decision from Validate Week 5:** Refine wedge held, product needs to catch up.  
+**Next test:** Complete a live two-sided transaction with Donald and Elias using the new mobile-ready frontend.
 
 ---
 
-## 👨‍💻 Author
+## Grant Applications
 
-**Terkaa Tarkighir (Rogers)**
-- GitHub: [@rogersterkaa](https://github.com/rogersterkaa)
-- Email: rogersterkaa@gmail.com
-- Location: Lagos, Nigeria
+| Grant | Reference | Status |
+|-------|-----------|--------|
+| Stacks Endowment Grant | SEGP-2026-4E8882DB | Submitted — under review |
+
+**Requested:** $6,900 (Getting Started track)  
+**Milestone 1:** Mobile-responsive frontend with multi-wallet support ✅ Complete  
+**Milestone 2:** Completed live two-sided transaction with onboarded merchants — in progress
 
 ---
 
-## 📄 License
+## Tech Stack
 
-MIT License — see [LICENSE](../../USER/Downloads/LICENSE) for details.
+| Layer | Technology |
+|-------|-----------|
+| Smart contracts | Clarity (Stacks) |
+| Settlement asset | sBTC |
+| Frontend | React + TypeScript (Vite) |
+| Wallet | Leather (via @stacks/connect) |
+| Deployment | Vercel |
+| AI tools | Stacks MCP Server (Claude Desktop) |
+
+---
+
+## Related Repos
+
+- **Frontend:** https://github.com/rogersterkaa/stacksbit-react
+- **Stacks MCP Server:** https://github.com/rogersterkaa/stacks-mcp-server
+
+---
+
+## Builder
+
+**Terkaa Tarkighir (Rogers)**  
+Blockchain developer — Jos, Plateau State, Nigeria  
+📧 rogersterkaa@gmail.com  
+🐙 github.com/rogersterkaa  
+🔗 stacksbit-react.vercel.app
+
+---
+
+## Hire Me
+
+Need a custom MCP server or blockchain integration for your project?
+
+I build on Stacks, Clarity, React, and Node.js — and I have hands-on experience shipping real escrow infrastructure to testnet.
+
+📧 rogersterkaa@gmail.com
